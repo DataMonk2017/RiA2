@@ -79,8 +79,8 @@ Arthritis
 example(Arthritis)
 # q()
 
+#one sample
 source("script1.R")
-
 #redirects output to the file filename, Include the option append=TRUE
 #to append text to the file rather than overwriting it. Including the option split=TRUE
 #will send output to both the screen and the output file.
