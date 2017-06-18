@@ -80,9 +80,15 @@ example(Arthritis)
 # q()
 
 source("script1.R")
-sink("myoutput",append=True, split=True)
+
+#redirects output to the file filename, Include the option append=TRUE
+#to append text to the file rather than overwriting it. Including the option split=TRUE
+#will send output to both the screen and the output file.
+sink("myoutput",append=True, split=True) 
 pdf('mygraphs.pdf')
 scource('script2.R')
+#sink() without options will return output to the screen alone.
+#To redirect graphic output, use one of the functions pdf,jpeg,png listed above. Use dev.off() to return output to the terminal.
 sink()
 dev.off()
 source('script3.R')
