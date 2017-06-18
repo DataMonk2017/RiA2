@@ -40,6 +40,27 @@ jpeg("filename.jpg") #JPEG file
 bmp("filename.bmp") #BMP file
 postscript("filename.ps") #PostScript file
 
+source()
+sink()
+dev.off()
+
+install.packages()
+install.packages('gclus')
+installed.packages()
+
+library('gclus')
+help(package="package_name")
+
+R CMD BATCH options infile outfile #batch processing
+
+lmfit = lm(mpg~wt, data=mtcars)
+summary(lmfit)
+plot(lmfit)
+cook = cooks.distance(lmfit)
+plot(cook)
+predict(lmfit, mynewdata)
+help(lm)
+?lm
 
 # A sample R session
 # q() is commented out so you don't accidently exit
