@@ -3,6 +3,16 @@
 # Creating a dataset                #
 #-----------------------------------#
 
+#rows: observations
+#columns: variables
+#mode:type of object
+
+#Vectors
+#Arrays
+#Data frames
+#Matrix
+#list of vectors/arrays/data frames/lists
+
 #  Creating vectors
 a <- c(1, 2, 5, 3, 6, -2, 4)
 b <- c("one", "two", "three")
@@ -28,9 +38,11 @@ y
 cells    <- c(1,26,24,68)
 rnames   <- c("R1", "R2")
 cnames   <- c("C1", "C2") 
+#fill by row
 mymatrix <- matrix(cells, nrow=2, ncol=2, byrow=TRUE,
                    dimnames=list(rnames, cnames)) 
 mymatrix
+#fill by column
 mymatrix <- matrix(cells, nrow=2, ncol=2, byrow=FALSE,
                    dimnames=list(rnames, cnames))
 mymatrix
@@ -63,22 +75,48 @@ patientdata
 
 
 # Listing 2.5 - Specifying elements of a dataframe
-patientdata[1:2]
+patientdata[1:2] #interesting
 patientdata[c("diabetes","status")]
 patientdata$age                       
 
+table(patientdata$diabetes, patientdata$status)
+
+#the following 2 codes are the same
+summary(mtcars$mpg)
+plot(mtcars$mpg, mtcars$disp)
+plot(mtcars$mpg, mtcars$wt)
+
+attach(mtcars)
+summary(mpg)
+plot(mpg, disp)
+plot(mpg, wt)
+detach(mtcars)
+
+#If you need to create objects that will exist outside of the with() construct, use the
+#special assignment operator <<- instead of the standard one (<-).
+with(mtcars, {
+nokeepstats <- summary(mpg)
+keepstats <<- summary(mpg)
+})
+
+#set patientID as rowname
+patientdata <- data.frame(patientID, age, diabetes, status,
+row.names=patientID)
 
 # Listing 2.6 - Using factors
 patientID <- c(1, 2, 3, 4)
 age <- c(25, 34, 28, 52)
 diabetes <- c("Type1", "Type2", "Type1", "Type1")
 status <- c("Poor", "Improved", "Excellent", "Poor")
-diabetes <- factor(diabetes)
-status <- factor(status, order=TRUE)
+diabetes <- factor(diabetes) #catergorical
+status <- factor(status, order=TRUE) #ordinal categorical
 patientdata <- data.frame(patientID, age, diabetes, status)
-str(patientdata)                               
-summary(patientdata)
+str(patientdata) #provides information on an object in R                              
+summary(patientdata) #provides the minimum, maximum, mean, and quartiles for the continuous variable age, and frequency counts
 
+#set the order of factor
+status <- factor(status, order=TRUE,
+levels=c("Poor", "Improved", "Excellent"))
 
 # Listing 2.7 - Creating a list
 g <- "My First List"
@@ -128,3 +166,40 @@ grades <- read.table("studentgrades.csv", header=TRUE,
                                   "numeric", "numeric", "numeric"))
 grades # print data frame
 str(grades) # view data frame structure
+
+#change the second variable names
+names(patientdata)[2] <- "Age at hospitalization (in years)"
+
+#
+#length(object) Number of elements/components.
+#dim(object) Dimensions of an object.
+#str(object) Structure of an object.
+#class(object) Class or type of an object.
+#mode(object) How an object is stored.
+#names(object) Names of components in an object.
+#c(object, object,...) Combines objects into a vector.
+#cbind(object, object, ...) Combines objects as columns.
+#rbind(object, object, ...) Combines objects as rows.
+#object Prints the object.
+#head(object) Lists the first part of the object.
+#tail(object) Lists the last part of the object.
+#ls() Lists current objects.
+#rm(object, object, ...) Deletes one or more objects. The statement
+#rm(list = ls()) will remove most objects
+#from the working environment.
+#newobject <- edit(object) Edits object and saves as newobject.
+#fix(object) Edits in place.
+
+
+#odbcConnect(dsn,uid="",pwd="") Open a connection to an ODBC database
+#sqlFetch(channel,sqltable) Read a table from an ODBC database into a data frame
+#sqlQuery(channel,query) Submit a query to an ODBC database and return the results
+#sqlSave(channel,mydf,tablename =sqtable,append=FALSE) Write or update (append=TRUE) a data frame to a table in the ODBC database
+#sqlDrop(channel,sqtable) Remove a table from the ODBC database
+#close(channel) Close the connection
+
+library(RODBC)
+myconn <-odbcConnect("mydsn", uid="Rob", pwd="aardvark")
+crimedat <- sqlFetch(myconn, Crime)
+pundat <- sqlQuery(myconn, "select * from Punishment")
+close(myconn)
